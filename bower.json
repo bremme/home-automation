@@ -1,0 +1,36 @@
+{
+  "name": "home.bremme.nl",
+  "version": "0.0.0",
+  "authors": [
+    "Bram Harmsen <bramharmsen@gmail.com>"
+  ],
+  "description": "Personal home automation",
+  "main": "client/app.js",
+  "moduleType": [
+    "node"
+  ],
+  "keywords": [
+    "homeautomation",
+    "nodejs",
+    "socketio",
+    "express",
+    "jade",
+    "raspberrypi",
+    "sqlite"
+  ],
+  "license": "MIT",
+  "homepage": "bremme.nl",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "client/lib",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.2.23",
+    "angular-ui-router": "~0.2.11"
+  }
+}

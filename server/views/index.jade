@@ -1,0 +1,22 @@
+doctype html
+html( data-ng-app="homeAutomationApp" ) 
+  head
+    meta( charset="utf8" )    
+    title HomeAutomation
+
+    link( rel="stylesheet", href="/css/style.css")
+
+body
+  div( data-ng-controller="mainCtrl" )
+
+    h1 {{title}}
+    p Welcome to {{sitename}}
+
+
+  // scripts lib
+  script(type="text/javascript", src="lib/angular/angular.js")
+  script(type="text/javascript", src="lib/angular-ui-router/release/angular-ui-router.js")
+  
+  // scripts js
+  script(type="text/javascript", src="js/app.js")
+  script(type="text/javascript", src="js/controllers.js")
