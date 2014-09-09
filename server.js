@@ -4,7 +4,7 @@
  */
 
 var express = require('express');
-var routes = require('./server/routes');
+var routes = require('./server/routes.js');
 // var api = require('./routes/api')
 var http = require('http');
 var path = require('path');
@@ -18,7 +18,7 @@ var app = express();
 
 // all environments
 app.set('port', process.env.PORT || 3003);
-app.set('views', path.join(__dirname, 'server/views'));
+app.set('views', path.join(__dirname, '/server/views'));
 app.set('view engine', 'jade');
 app.use(express.favicon());
 app.use(express.logger('dev'));
@@ -44,7 +44,8 @@ if (app.get('env') === 'production') {
 // ROUTES
 // index route
 app.get('/', routes.index);
-
+// partials route
+app.get('/partials/:name', routes.partials);
 
 // JSON API
 

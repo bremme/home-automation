@@ -9,7 +9,8 @@ angular.module( 'homeAutomationApp', [ 'ui.router' ] )
     $stateProvider
       .state('home' , {
         url: '/',
-        templateUrl: '/'
+        templateUrl: 'partials/home',
+        controller: 'mainCtrl'
       });
 
   }]);
