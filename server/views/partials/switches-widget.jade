@@ -1,0 +1,58 @@
+div.panel.panel-default
+  div.panel-heading(data-ng-click="isCollapsed = !isCollapsed") 
+    div.panel-title-lg Switches
+    //- button.btn.btn-default.btn-xs(data-toggle="modal",data-target="#switch-settings-modal")
+    //-   span.glyphicon.glyphicon-wrench
+    //- button.btn.btn-default.btn-xs()
+    //-   span.glyphicon.glyphicon-chevron-up
+  div( collapse='isCollapsed')
+    // panel body
+    div.panel-body
+      div.row.panel-row
+        div.col-xs-4.panel-element
+          h4 Gang        
+        div.col-xs-6.panel-element
+          div.btn-group.btn-group-stretch
+            label(data-ng-model="lights['hallway']",btn-radio="'off'").btn.btn-lg.btn-50.btn-default.active {{ lights['hallway'] == 'off' ? 'Off' : '&nbsp;' }}
+            label(data-ng-model="lights['hallway']",btn-radio="'on'").btn.btn-lg.btn-50.btn-info {{ lights['hallway'] == 'on' ? 'On' : '&nbsp;' }}
+        div.col-xs-2.panel-element    
+          div.led( data-ng-class="{on:'led-green',off:'led-grey'}[lights['hallway']]")
+      div.row.panel-row
+        div.col-xs-4.panel-element
+          h4 Keuken       
+        div.col-xs-6.panel-element
+          div.btn-group.btn-group-stretch
+            label(data-ng-model="lights['kitchen']",btn-radio="'off'").btn.btn-lg.btn-50.btn-default.active {{ lights['kitchen'] == 'off' ? 'Off' : '&nbsp;' }}
+            label(data-ng-model="lights['kitchen']",btn-radio="'on'").btn.btn-lg.btn-50.btn-info {{ lights['kitchen'] == 'on' ? 'On' : '&nbsp;' }}
+        div.col-xs-2.panel-element    
+          div.led( data-ng-class="{on:'led-green',off:'led-grey'}[lights['kitchen']]")
+    //-   div.col-xs-9
+    //-     div.row
+    //-       div.col-xs-6
+    //-         h4 Gang
+    //-       div.col-xs-6(style="margin-bottom:5px;")
+    //-         input.bootstrap-switch(type="checkbox",data-on="success",data-off="info")
+    //-     div.row
+    //-       div.col-xs-6
+    //-         h4 Keuken
+    //-       div.col-xs-6(style="margin-bottom:5px;")
+    //-         input.bootstrap-switch(type="checkbox",data-on="success",data-off="info")
+    //-     div.row
+    //-       div.col-xs-6
+    //-         h4 Woonkamer
+    //-       div.col-xs-4(style="margin-bottom:5px;")
+    //-         input.bootstrap-switch(type="checkbox",data-on="success",data-off="info")
+    //-     div.row
+    //-       div.col-xs-6
+    //-         h4 Studeerkamer
+    //-       div.col-xs-4(style="margin-bottom:5px;")
+    //-         input.bootstrap-switch(type="checkbox",data-on="success",data-off="info")
+    //-   div.col-xs-3
+    //-     div.led-green
+    //-     div.btn-group-vertical
+    //-         button.btn.btn-success.btn-md(style="width:50px;")                      
+    //-           i.ionicons.ion-lightbulb
+    //-         button.btn.btn-info.btn-md(style="width:50px;")
+    //-           span.glyphicon.glyphicon-off
+  div.panel-footer
+    small Gang uit om 18:05

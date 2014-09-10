@@ -3,14 +3,19 @@
  * Module dependencies
  */
 
-var express = require('express');
-var routes = require('./server/routes.js');
+
+var routes  = require('./server/routes.js');
 // var api = require('./routes/api')
-var http = require('http');
-var path = require('path');
+var path    = require('path');
 
-
+var express = require('express');
 var app = express();
+var server    = require('http').createServer(app);
+var io      = require('socket.io').listen(server);
+
+
+
+
  
 /**
 * Configuration
@@ -54,6 +59,11 @@ app.get('/partials/:name', routes.partials);
 * Start Server
 */
 
-http.createServer(app).listen(app.get('port'), function () {
+server.listen(app.get('port'), function () {
   console.log('Express server listening on port ' + app.get('port'));
+});
+
+
+io.on('connection', function(socket){
+  console.log('a client connected');
 });

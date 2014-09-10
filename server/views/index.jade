@@ -1,24 +1,73 @@
 doctype html
-html( data-ng-app='homeAutomationApp' ) 
+html( data-ng-app='app' ) 
   head
-    meta( charset='utf8' )    
+    meta( charset='utf8' )
+    meta( name="viewport",content="width=device-width, initial-scale=1.0" )
+
     title HomeAutomation
 
     link( rel='stylesheet', href='/css/style.css')
     link( rel='stylesheet', href='/lib/bootstrap/dist/css/bootstrap.css')
+    link( rel='stylesheet', href='/lib/ionicons/css/ionicons.min.css')
+    link( rel='stylesheet', href='/css/font-awesome.min.css')
+    // scripts angular
+    script(type='text/javascript', src='lib/jquery/dist/jquery.min.js')
+    script(type='text/javascript', src='lib/angular/angular.min.js')
+    script(type='text/javascript', src='lib/angular-ui-router/release/angular-ui-router.min.js')
+    
+    // scripts socket io
+    script(type='text/javascript', src="/socket.io/socket.io.js")
+    script(type='text/javascript', src='lib/angular-socket-io/socket.min.js')
+
+    // script bootstrap
+    // script(type='text/javascript', src='lib/bootstrap/dist/js/bootstrap.min.js')
+    script(type='text/javascript', src='lib/angular-bootstrap/ui-bootstrap.min.js')
+
+
+    // scripts js
+    script(type='text/javascript', src='js/app.js')
+    script(type='text/javascript', src='js/controllers.js')
+    script(type='text/javascript', src='js/services.js')
 
 body
-  // div( data-ng-controller='mainCtrl' )
-  div( data-ui-view )
+  div.container-fluid
+    div.row
+      // NAVIGATION
+      nav.navbar.navbar-default.navbar-inverse(role='navigation')
+        //
+           Brand and toggle get grouped for better mobile display 
+        div.navbar-header
+          button.navbar-toggle.collapsed(type='button', data-toggle='collapse', data-target='#bs-example-navbar-collapse-1')
+            span.sr-only Toggle navigation
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+          a.navbar-brand(ui-sref='home') @deHut
+        //
+           Collect the nav links, forms, and other content for toggling 
+        div#bs-example-navbar-collapse-1.collapse.navbar-collapse
+          ul.nav.navbar-nav
+            li.active
+              a(ui-sref='home') Link
+            li
+              a(ui-sref='home') Link
 
-  // scripts lib
-  script(type='text/javascript', src='lib/angular/angular.min.js')
-  script(type='text/javascript', src='lib/angular-ui-router/release/angular-ui-router.min.js')
-  // script bootstrap
-  script(type='text/javascript', src='lib/jquery/dist/jquery.min.js')
-  script(type='text/javascript', src='lib/angular-bootstrap/ui-bootstrap.min.js')
-  script(type='text/javascript', src='lib/bootstrap/dist/js/bootstrap.min.js')
+    //- div.row
+    //-   nav.navbar.navbar-inverse(role='navigation')
+    //-     div.navbar-header
+    //-         a.navbar-brand(ui-sref='#') @deHut
+    //-       ul.nav.navbar-nav
+    //-         li
+    //-           a(ui-sref='home') Home
+    //-         li
+    //-           a(ui-sref='home') Menu one
+    //-         li
+    //-           a(ui-sref='home') Menu two
+    // MAIN CONTENT
+    div.row
+      div( data-ui-view )
 
-  // scripts js
-  script(type='text/javascript', src='js/app.js')
-  script(type='text/javascript', src='js/controllers.js')
+    // FOOTER
+    div.row
+      div.text-center
+        p Home Automation - Bram Harmsen 2014

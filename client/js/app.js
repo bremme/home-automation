@@ -1,16 +1,30 @@
 'use strict';
 
-angular.module( 'homeAutomationApp', [ 'ui.router' ] )
-
+angular.module( 'app', [
+  'app.controllers',
+  'app.services',
+  'ui.router', 
+  'ui.bootstrap', 
+  'btford.socket-io' 
+  ])
   .config(['$stateProvider', '$urlRouterProvider', function ( $stateProvider, $urlRouterProvider ) {
 
     $urlRouterProvider.otherwise( '/' );
 
     $stateProvider
-      .state('home' , {
+      .state( 'home', {
         url: '/',
-        templateUrl: 'partials/home',
-        controller: 'mainCtrl'
+        views: {
+          '': {
+            templateUrl: 'partials/widgets'
+          },
+          'switches-widget@home': {
+            templateUrl: 'partials/switches-widget',
+            controller: 'switchesCtrl'
+          },
+          'climate-widget@home': {
+            templateUrl: 'partials/climate-widget'
+          }
+        }
       });
-
   }]);
