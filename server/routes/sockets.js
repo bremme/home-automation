@@ -21,7 +21,7 @@ SocketsHandler.prototype.listen = function(socket) {
   var data = {};
 
   // get switches state from database
-  db.all("SELECT * FROM v_devices WHERE dev_type='light'",function(err,rows) {
+  db.all("SELECT * FROM v_devices WHERE devType='light'",function(err,rows) {
 
     // convert data to appropriate formate
     // data.<device_type>.<location_name>.<dev_name_short> = <state_string>
@@ -49,15 +49,15 @@ SocketsHandler.prototype.listen = function(socket) {
   // EVENTS ////////////////////////////////////////////////////////////////////
  
   // PUT - Update switch state
-  socket.on('change:switch', function(data, callback) {
+  socket.on('change:switch', function(aSwitch, callback) {
 
 
-    console.log('change:switch: ' + JSON.stringify(data) );
+    console.log('change:switch: ' + JSON.stringify(aSwitch) );
 
     // set new state of swtich (hardware)
 
     // store new state of switch in database
-    db.run("UPDATE devices SET state=? WHERE id=?", [data.state, data.id], function(err) {
+    db.run("UPDATE devices SET state=? WHERE id=?", [aSwitch.devState, aSwitch.devId], function(err) {
 
       if(err) {
         // log error on server
@@ -66,26 +66,27 @@ SocketsHandler.prototype.listen = function(socket) {
         callback(err)
       } else {
 
-          // confirm succesfull change of switch state
-          db.all("SELECT * FROM v_devices WHERE dev_id=?",[data.id], function(err,rows) {
+        socket.broadcast.emit('change:switch', aSwitch )
+      //     // confirm succesfull change of switch state
+      //     db.all("SELECT * FROM v_devices WHERE devId=?",[data.devId], function(err,rows) {
 
-            if ( !err ) {
-              var sw = {};
-              sw.id = rows[0].dev_id;
-              sw.state = rows[0].dev_state;
-              sw.location = rows[0].dev_loc;
-              sw.nameShort = rows[0].dev_name_short;
-              console.log(sw)
-              // send changed switch state to other clients
-              socket.broadcast.emit('change:switch', sw)
-            }
+      //       if ( !err ) {
+      //         var sw = {};
+      //         sw.id = rows[0].dev_id;
+      //         sw.state = rows[0].dev_state;
+      //         sw.location = rows[0].dev_loc;
+      //         sw.nameShort = rows[0].dev_name_short;
+      //         console.log(sw)
+      //         // send changed switch state to other clients
+      //         socket.broadcast.emit('change:switch', sw)
+      //       }
 
-          })
+      //     })
           
 
-          // var res = {msg:'succes',info:'Succesfully change state of switch'};
+      //     // var res = {msg:'succes',info:'Succesfully change state of switch'};
 
-          // callback(err);
+      //     // callback(err);
 
       }
     });

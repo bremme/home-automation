@@ -19,57 +19,45 @@ angular.module('app.controllers',[])
 
 // Switches controller
 .controller('switchesCtrl',
-[ '$scope', 'socket', function ( $scope, socket ) {
+[ '$scope', '$filter', 'socket', function ( $scope, $filter, socket ) {
 
   $scope.isCollapsed = false;
 
   // Light switches
 
   // Initialization of switches
-  socket.on('init:switch:lights',function(data) {
+  socket.on('init:switch:lights',function(rows) {
 
-    $scope.lights = {};
+    if (! $scope.switched ) {
+      $scope.switches = [];  
+    }
+        
+    for (var key in rows) {
+      $scope.switches.push(rows[key]);
+    }     
+  })
 
-    var location = '';
-    var shortName = '';
 
-    // attach to scope
-    for (var i = 0; i < data.length; i++) {
-
-      location = data[i].dev_loc;
-      shortName =data[i].dev_name_short;
-
-      // check if location (already) exists
-      if ( !$scope.lights.hasOwnProperty(location) ) {
-        $scope.lights[location] = {};
+  socket.on('change:switch', function(aSwitch) {
+    // get the index of the switch that changed
+    for (var i=0 ; i < $scope.switches.length ; i++) {
+      if (aSwitch.devId === $scope.switches[i].devId ) {        
+        break;
       }
-      // check if shortName (already) exists
-      if ( !$scope.lights[location].hasOwnProperty(shortName) ) {
-        $scope.lights[location][shortName] ={};      }
-
-      $scope.lights[location][shortName]['id'] = data[i].dev_id;
-      $scope.lights[location][shortName]['state'] = data[i].dev_state;
-
-    }       
+    }
+    // set the new state on the switch on the scope
+    $scope.switches[i].devState = aSwitch.devState;
+    // log message to console
+    console.log('change:switch : ' + $scope.switches[i].devNameShort + ' ' + $scope.switches[i].devLoc + ' (id:' + aSwitch.devId + ') to "' + ((aSwitch.devState === 1) ? 'on ':'off') + '" by other client');
   })
 
-
-  socket.on('change:switch', function(sw) {
-    console.log('change:switch');
-    $scope.lights[sw.location][sw.nameShort]['state'] = sw.state;
-    // find switch with id
-
-    // set new state of switch
-
-  })
-
-  $scope.switchClicked = function(sw) {
-
+  // handle switch clicked events
+  $scope.switchClicked = function(aSwitch) {
     var data = {};
-    data.id = sw.id;
-    data.state = sw.state;
+    data.devId = aSwitch.devId;
+    data.devState = aSwitch.devState;
     socket.emit('change:switch',data);
-
+    console.log('change:switch : ' + aSwitch.devNameShort + ' ' + aSwitch.devLoc + ' (id:' + aSwitch.devId + ') to "' + ((aSwitch.devState === 1) ? 'on ':'off') + '" by this client');
   }
 
   // // Watch for light switch changes

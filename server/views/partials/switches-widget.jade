@@ -1,6 +1,6 @@
 div.panel.panel-default
   div.panel-heading(data-ng-click="isCollapsed = !isCollapsed") 
-    div.panel-title-lg Switches
+    div.panel-title-lg Switches first floor
     //- button.btn.btn-default.btn-xs(data-toggle="modal",data-target="#switch-settings-modal")
     //-   span.glyphicon.glyphicon-wrench
     //- button.btn.btn-default.btn-xs()
@@ -8,28 +8,41 @@ div.panel.panel-default
   div( collapse='isCollapsed')
     // panel body
     div.panel-body
-      div.row.panel-row
-        div.col-xs-4.panel-element
-          h4 Gang {{ lights.hallway.light.state }}  
-        div.col-xs-6.panel-element
-          div.btn-group.btn-group-stretch
-            // off button
-            label(data-ng-change="switchClicked(lights.hallway.light)", data-ng-model="lights.hallway.light.state", data-ng-class="{1:'btn-default',0:'btn-info'}[lights.hallway.light.state]", btn-radio="0").btn.btn-lg.btn-50 {{ lights.hallway.light.state == 0 ? 'Off' : '&nbsp;' }}
-            // on button
-            label(data-ng-change="switchClicked(lights.hallway.light)", data-ng-model="lights.hallway.light.state", data-ng-class="{1:'btn-success',0:'btn-default'}[lights.hallway.light.state]", btn-radio="1").btn.btn-lg.btn-50 {{ lights.hallway.light.state == 1 ? 'On' : '&nbsp;' }}
-        div.col-xs-2.panel-element    
-          div.led( data-ng-class="{1:'led-green',0:'led-grey'}[lights.hallway.light.state]")
-      div.row.panel-row
-        div.col-xs-4.panel-element
-          h4 Keuken     
-        div.col-xs-6.panel-element
-          div.btn-group.btn-group-stretch
-            // off button
-            label(data-ng-model="lights['kitchen']", data-ng-class="{on:'btn-default',off:'btn-info'}[lights['kitchen']]", btn-radio="'off'").btn.btn-lg.btn-50 {{ lights['kitchen'] == 'off' ? 'Off' : '&nbsp;' }}
-            // on button
-            label(data-ng-model="lights['kitchen']", data-ng-class="{on:'btn-success',off:'btn-default'}[lights['kitchen']]", btn-radio="'on'").btn.btn-lg.btn-50 {{ lights['kitchen'] == 'on' ? 'On' : '&nbsp;' }}  
-        div.col-xs-2.panel-element    
-          div.led( data-ng-class="{on:'led-green',off:'led-grey'}[lights['kitchen']]")
+        div( data-ng-repeat="aSwitch in switches")
+            div.row.panel-row     
+                div.col-xs-4.panel-element
+                    h4 {{ aSwitch.devNameShort }}     
+                div.col-xs-6.panel-element
+                    div.btn-group.btn-group-stretch
+                        // off button
+                        label(data-ng-change="switchClicked(aSwitch)", data-ng-model="aSwitch.devState", data-ng-class="{1:'btn-default',0:'btn-info'}[aSwitch.devState]", btn-radio="0" ).btn.btn-lg.btn-50 {{ aSwitch.devState == 0 ? 'Off' : '&nbsp;' }}
+                        // on button
+                        label(data-ng-change="switchClicked(aSwitch)", data-ng-model="aSwitch.devState", data-ng-class="{1:'btn-success',0:'btn-default'}[aSwitch.devState]", btn-radio="1" ).btn.btn-lg.btn-50 {{ aSwitch.devState == 1 ? 'On' : '&nbsp;' }}
+                div.col-xs-2.panel-element    
+                    div.led( data-ng-class="{1:'led-green',0:'led-grey'}[aSwitch.devState]")
+    div.panel-footer
+        small Gang uit om 18:05
+      //-   div.col-xs-4.panel-element
+      //-     h4 Gang  
+      //-   div.col-xs-6.panel-element
+      //-     div.btn-group.btn-group-stretch
+      //-       // off button
+      //-       label(data-ng-change="switchClicked(light.hallway.light)", data-ng-model="light.hallway.light.state", data-ng-class="{1:'btn-default',0:'btn-info'}[light.hallway.light.state]", btn-radio="0").btn.btn-lg.btn-50 {{ light.hallway.light.state == 0 ? 'Off' : '&nbsp;' }}
+      //-       // on button
+      //-       label(data-ng-change="switchClicked(light.hallway.light)", data-ng-model="light.hallway.light.state", data-ng-class="{1:'btn-success',0:'btn-default'}[light.hallway.light.state]", btn-radio="1").btn.btn-lg.btn-50 {{ light.hallway.light.state == 1 ? 'On' : '&nbsp;' }}
+      //-   div.col-xs-2.panel-element    
+      //-     div.led( data-ng-class="{1:'led-green',0:'led-grey'}[light.hallway.light.state]")
+      //- div.row.panel-row
+      //-   div.col-xs-4.panel-element
+      //-     h4 Keuken     
+      //-   div.col-xs-6.panel-element
+      //-     div.btn-group.btn-group-stretch
+      //-       // off button
+      //-       label(data-ng-change="switchClicked(light.kitchen.light)", data-ng-model="light.kitchen.light.state", data-ng-class="{1:'btn-default',0:'btn-info'}[light.kitchen.light.state]", btn-radio="0").btn.btn-lg.btn-50 {{ light.kitchen.light.state == 0 ? 'Off' : '&nbsp;' }}
+      //-       // on button
+      //-       label(data-ng-change="switchClicked(light.kitchen.light)", data-ng-model="light.kitchen.light.state", data-ng-class="{1:'btn-success',0:'btn-default'}[light.kitchen.light.state]", btn-radio="1").btn.btn-lg.btn-50 {{ light.kitchen.light.state == 1 ? 'On' : '&nbsp;' }}  
+      //-   div.col-xs-2.panel-element    
+      //-     div.led( data-ng-class="{1:'led-green',0:'led-grey'}[light.kitchen.light.state]")
     //-   div.col-xs-9
     //-     div.row
     //-       div.col-xs-6
@@ -58,5 +71,3 @@ div.panel.panel-default
     //-           i.ionicons.ion-lightbulb
     //-         button.btn.btn-info.btn-md(style="width:50px;")
     //-           span.glyphicon.glyphicon-off
-  div.panel-footer
-    small Gang uit om 18:05
