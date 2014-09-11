@@ -45,10 +45,8 @@ angular.module('app.controllers',[])
 
       if (newValue[key] != oldValue[key]) {
         console.log(key + ' ' + newValue[key])
-        socket.emit('change:switch', {somedata: 'somedata'}, function(res) {
+        socket.emit('change:switch', {somedata: 'somedata'}, function(err) {
           
-
-          console.log(res.msg,res.info);
         })
         break;
       }

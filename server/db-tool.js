@@ -41,51 +41,48 @@ DbTool.prototype.init = function(db) {
   db.serialize(function() {
 
     // CREATE TABLES
-
-    // Create Devices table
-    db.run("CREATE TABLE Devices (id INTEGER PRIMARY KEY, name TEXT, location_id TEXT, state INTEGER, switch_id INTEGER)",[],function(err){
-      if (err) {
-        console.log(err);
-      }
-    });
-    console.log('Created table: Devices');
     // Create Locations table
-    db.run("CREATE TABLE Locations (id INTEGER PRIMARY KEY, name TEXT)",[],function(err){
+    db.run("CREATE TABLE locations (id INTEGER PRIMARY KEY, name TEXT)",[],function(err){
       if (err) {
         console.log(err);
       }
     });
     console.log('Created table: Locations');
+
+    db.run("CREATE TABLE switch_brands (id INTEGER PRIMARY KEY, name TEXT )",[],function(err){
+      if (err) {
+        console.log(err);
+      }
+    });
+
     // Create Switches table
-    db.run("CREATE TABLE Switches (id INTEGER PRIMARY KEY, switch_table TEXT, switch_id INTEGER)",[],function(err){
+    db.run("CREATE TABLE switches (id INTEGER PRIMARY KEY, switch_brand_id INTEGER, properties_json TEXT, FOREIGN KEY(switch_brand_id) REFERENCES switch_brands(id) )",[],function(err){
       if (err) {
         console.log(err);
       }
     });
     console.log('Created table: Switches');
-    // Create Switches brand table (Impuls)
-    db.run("CREATE TABLE Switches_impuls (id INTEGER PRIMARY KEY, system_code INTEGER, receiver_code TEXT)",[],function(err){
+    // Create Devices table
+    db.run("CREATE TABLE devices ( id INTEGER PRIMARY KEY, name TEXT, location_id INTEGER, state INTEGER, switch_id INTEGER, FOREIGN KEY(location_id) REFERENCES locations(id), FOREIGN KEY(switch_id) REFERENCES switches(id) )",[],function(err){
       if (err) {
         console.log(err);
       }
     });
-    console.log('Created table: Switches brand table (Impuls)');
+    console.log('Created table: Devices');
+    
+    // // Create Switches brand table (Impuls)
+    // db.run("CREATE TABLE Switches_impuls (id INTEGER PRIMARY KEY, system_code INTEGER, receiver_code TEXT)",[],function(err){
+    //   if (err) {
+    //     console.log(err);
+    //   }
+    // });
+    // console.log('Created table: Switches brand table (Impuls)');
 
     // INSERT INTO TABLES
 
-    db.run("BEGIN TRANSACTION");
-    for (var i=0; i < systemCodes.length; i++) {
 
-      for (var j=0; j < receiverCodes.length; j++) {
-        db.run("INSERT INTO Switches_impuls VALUES (NULL,?,?)",
-          [systemCodes[i], receiverCodes[j]]);
-        db.run("INSERT INTO Switches VALUES (NULL,? , ?)",['switches_impuls', j+1+i*receiverCodes.length ], function(err) {
-          if (err) {
-            console.log(err);
-          }  
-        });
-      }
-    }
+
+    db.run("BEGIN TRANSACTION");
 
     for (var i=0; i < locations.length; i++) {
       db.run("INSERT INTO locations VALUES (NULL,?)",[ locations[i]],function(err){
@@ -94,12 +91,42 @@ DbTool.prototype.init = function(db) {
         }
       })
     }
-    for (var i=0; i < devices.length; i++ ){
-      db.run("INSERT INTO devices VALUES (NULL, ?, ?, ?, ?)",devices[i][0],devices[i][1],devices[i][2],devices[i][3]);  
+
+    db.run("INSERT INTO switch_brands VALUES (NULL,?)", "Impulse");
+
+
+    var switchProp = '';
+
+    for (var i=0; i < systemCodes.length; i++) {
+
+      for (var j=0; j < receiverCodes.length; j++) {
+        // db.run("INSERT INTO Switches_impuls VALUES (NULL,?,?)",
+        //   [systemCodes[i], receiverCodes[j]]);
+
+      
+        switchProp = '{"systemCode":' + systemCodes[i] + ',"receiverCode":"'  + receiverCodes[j] + '"}';
+
+        db.run("INSERT INTO Switches VALUES (NULL,? , ?)",[1, switchProp ], function(err) {
+          if (err) {
+            console.log(err);
+          }  
+        });
+      }
     }
+
+
+    // for (var i=0; i < devices.length; i++ ){
+    //   db.run("INSERT INTO devices VALUES (NULL, ?, ?, ?, ?)",devices[i][0],devices[i][1],devices[i][2],devices[i][3]);  
+    // }
     
     db.run("COMMIT");
 
+
+    // test to read JSON from database
+    db.each("SELECT properties_json FROM switches WHERE id=1", function(err,row) {
+      var props = JSON.parse(row.properties_json);
+      console.log(props);
+    })
 
 
     db.close();

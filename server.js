@@ -64,7 +64,7 @@ app.get('/partials/:name', routes.partials);
 io.on('connection', socketHandler.listen );
 
 
-// Database 
+// Database  
 
 
 /**
@@ -73,6 +73,10 @@ io.on('connection', socketHandler.listen );
 
 server.listen(app.get('port'), function () {
   console.log('Express server listening on port ' + app.get('port'));
+
+  // we write a file when the server is up and running. 
+  // Don't forget to include "fs" at the beginning: var fs = require('fs') 
+  fs.writeFile(__dirname + '/server/start.log', 'started');
 });
 
 

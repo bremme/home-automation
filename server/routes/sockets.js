@@ -1,7 +1,6 @@
 
 
 var db   = require('../db-con.js');
-console.log('dbcon ' + JSON.stringify(db))
 
 // Constructor method
 function SocketsHandler(db,io) {
@@ -20,20 +19,15 @@ SocketsHandler.prototype.listen = function(socket) {
 
 
   console.log('a client connected: ' + socket.id);
-  // console.log(this.db)
-  // Send system state
-  // console.log(socket)
-  // get switches state from database
 
+  // Send (initial) system state
+
+  // get switches state from database
+  db
  
   // PUT - Update switch state
   socket.on('change:switch', function(data, callback) {
 
-    // test db connection
-    db.each("SELECT name FROM locations LIMIT 1",function(err,row) {
-      console.log(row.name);
-    });
-    console.log(this.io)
 
     console.log('send data: ' + JSON.stringify(data) );
 
@@ -45,7 +39,7 @@ SocketsHandler.prototype.listen = function(socket) {
 
     var res = {msg:'succes',info:'Succesfully change state of switch'};
 
-    callback(res);
+    // callback(err);
 
   })
 
