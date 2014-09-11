@@ -129,6 +129,9 @@ DbTool.prototype.init = function(db) {
     })
 
 
+    // Create views
+    db.run("CREATE VIEW IF NOT EXIST v_devices AS SELECT devices.id as dev_id, devices.name as dev_name, locations.name as loc_name,switches.properties_json FROM devices,locations,switches WHERE devices.location_id=locations.id AND devices.switch_id=switches.id")
+
     db.close();
   })
 
