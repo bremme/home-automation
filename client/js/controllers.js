@@ -21,37 +21,88 @@ angular.module('app.controllers',[])
 .controller('switchesCtrl',
 [ '$scope', 'socket', function ( $scope, socket ) {
 
-  // Light switches
-
-
-
   $scope.isCollapsed = false;
 
-  $scope.lights = { 
-    hallway:'off',
-    kitchen:'off',
-    livingRoom:'off',
-    moodLight:'off',
-    studyRoom:'off',
-    upstairs:'off',
-    upstairsMood:'off'
+  // Light switches
+
+  // Initialization of switches
+  socket.on('init:switch:lights',function(data) {
+
+    $scope.lights = {};
+
+    var location = '';
+    var shortName = '';
+
+    // attach to scope
+    for (var i = 0; i < data.length; i++) {
+
+      location = data[i].dev_loc;
+      shortName =data[i].dev_name_short;
+
+      // check if location (already) exists
+      if ( !$scope.lights.hasOwnProperty(location) ) {
+        $scope.lights[location] = {};
+      }
+      // check if shortName (already) exists
+      if ( !$scope.lights[location].hasOwnProperty(shortName) ) {
+        $scope.lights[location][shortName] ={};      }
+
+      $scope.lights[location][shortName]['id'] = data[i].dev_id;
+      $scope.lights[location][shortName]['state'] = data[i].dev_state;
+
+    }       
+  })
+
+
+  socket.on('change:switch', function(sw) {
+    console.log('change:switch');
+    $scope.lights[sw.location][sw.nameShort]['state'] = sw.state;
+    // find switch with id
+
+    // set new state of switch
+
+  })
+
+  $scope.switchClicked = function(sw) {
+
+    var data = {};
+    data.id = sw.id;
+    data.state = sw.state;
+    socket.emit('change:switch',data);
+
   }
 
-  // Watch for light switch changes
-  $scope.$watchCollection('lights', function(newValue, oldValue) {     
+  // // Watch for light switch changes
+  // $scope.$watch('lights', function(newValue, oldValue) {     
 
-    // loop over items in object
-    for (var key in newValue ) {
+  //   console.log(newValue);
 
-      if (newValue[key] != oldValue[key]) {
-        console.log(key + ' ' + newValue[key])
-        socket.emit('change:switch', {somedata: 'somedata'}, function(err) {
+  //   var id = 0;
+  //   var state = 0;
+
+  //   var newStates = [];
+  //   var oldStates = [];
+
+  //   // get newStates and oldStates
+  //   for ( var loc in newValue ) {
+
+
+  //   }
+
+
+  //   // // loop over items in object
+  //   // for (var key in newValue ) {
+
+  //   //   if (newValue[key] != oldValue[key]) {
+  //   //     console.log(key + ' ' + newValue[key])
+  //   //     socket.emit('change:switch', {somedata: 'somedata'}, function(err) {
           
-        })
-        break;
-      }
-    } 
-  });
+  //   //     })
+  //   //     break;
+  //   //   }
+  //   // } 
+  // }, true);
+
   // Appliance switches
 
 

@@ -10,18 +10,18 @@ div.panel.panel-default
     div.panel-body
       div.row.panel-row
         div.col-xs-4.panel-element
-          h4 Gang
+          h4 Gang {{ lights.hallway.light.state }}  
         div.col-xs-6.panel-element
           div.btn-group.btn-group-stretch
             // off button
-            label(data-ng-model="lights['hallway']", data-ng-class="{on:'btn-default',off:'btn-info'}[lights['hallway']]", btn-radio="'off'").btn.btn-lg.btn-50 {{ lights['hallway'] == 'off' ? 'Off' : '&nbsp;' }}
+            label(data-ng-change="switchClicked(lights.hallway.light)", data-ng-model="lights.hallway.light.state", data-ng-class="{1:'btn-default',0:'btn-info'}[lights.hallway.light.state]", btn-radio="0").btn.btn-lg.btn-50 {{ lights.hallway.light.state == 0 ? 'Off' : '&nbsp;' }}
             // on button
-            label(data-ng-model="lights['hallway']", data-ng-class="{on:'btn-success',off:'btn-default'}[lights['hallway']]", btn-radio="'on'").btn.btn-lg.btn-50 {{ lights['hallway'] == 'on' ? 'On' : '&nbsp;' }}
+            label(data-ng-change="switchClicked(lights.hallway.light)", data-ng-model="lights.hallway.light.state", data-ng-class="{1:'btn-success',0:'btn-default'}[lights.hallway.light.state]", btn-radio="1").btn.btn-lg.btn-50 {{ lights.hallway.light.state == 1 ? 'On' : '&nbsp;' }}
         div.col-xs-2.panel-element    
-          div.led( data-ng-class="{on:'led-green',off:'led-grey'}[lights['hallway']]")
+          div.led( data-ng-class="{1:'led-green',0:'led-grey'}[lights.hallway.light.state]")
       div.row.panel-row
         div.col-xs-4.panel-element
-          h4 Keuken       
+          h4 Keuken     
         div.col-xs-6.panel-element
           div.btn-group.btn-group-stretch
             // off button
