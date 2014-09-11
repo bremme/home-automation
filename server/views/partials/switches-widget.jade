@@ -1,6 +1,6 @@
 div.panel.panel-default
   div.panel-heading(data-ng-click="isCollapsed = !isCollapsed") 
-    div.panel-title-lg Switches first floor
+    div.panel-title-lg Lights first floor
     //- button.btn.btn-default.btn-xs(data-toggle="modal",data-target="#switch-settings-modal")
     //-   span.glyphicon.glyphicon-wrench
     //- button.btn.btn-default.btn-xs()
@@ -8,10 +8,10 @@ div.panel.panel-default
   div( collapse='isCollapsed')
     // panel body
     div.panel-body
-        div( data-ng-repeat="aSwitch in switches")
+        div( data-ng-repeat="aSwitch in switches | filter:{devType:'light', devFloor:'first'}: true")
             div.row.panel-row     
                 div.col-xs-4.panel-element
-                    h4 {{ aSwitch.devNameShort }}     
+                    h4 {{ aSwitch.devName }}     
                 div.col-xs-6.panel-element
                     div.btn-group.btn-group-stretch
                         // off button
@@ -22,6 +22,55 @@ div.panel.panel-default
                     div.led( data-ng-class="{1:'led-green',0:'led-grey'}[aSwitch.devState]")
     div.panel-footer
         small Gang uit om 18:05
+div.panel.panel-default
+  div.panel-heading(data-ng-click="isCollapsed = !isCollapsed") 
+    div.panel-title-lg Lights upstairs
+    //- button.btn.btn-default.btn-xs(data-toggle="modal",data-target="#switch-settings-modal")
+    //-   span.glyphicon.glyphicon-wrench
+    //- button.btn.btn-default.btn-xs()
+    //-   span.glyphicon.glyphicon-chevron-up
+  div( collapse='isCollapsed')
+    // panel body
+    div.panel-body
+        div( data-ng-repeat="aSwitch in switches | filter:{devType:'light', devFloor:'loft'}: true")
+            div.row.panel-row     
+                div.col-xs-4.panel-element
+                    h4 {{ aSwitch.devName }}     
+                div.col-xs-6.panel-element
+                    div.btn-group.btn-group-stretch
+                        // off button
+                        label(data-ng-change="switchClicked(aSwitch)", data-ng-model="aSwitch.devState", data-ng-class="{1:'btn-default',0:'btn-info'}[aSwitch.devState]", btn-radio="0" ).btn.btn-lg.btn-50 {{ aSwitch.devState == 0 ? 'Off' : '&nbsp;' }}
+                        // on button
+                        label(data-ng-change="switchClicked(aSwitch)", data-ng-model="aSwitch.devState", data-ng-class="{1:'btn-success',0:'btn-default'}[aSwitch.devState]", btn-radio="1" ).btn.btn-lg.btn-50 {{ aSwitch.devState == 1 ? 'On' : '&nbsp;' }}
+                div.col-xs-2.panel-element    
+                    div.led( data-ng-class="{1:'led-green',0:'led-grey'}[aSwitch.devState]")
+    div.panel-footer
+        small Gang uit om 18:05
+div.panel.panel-default
+  div.panel-heading(data-ng-click="isCollapsed = !isCollapsed") 
+    div.panel-title-lg Appliances
+    //- button.btn.btn-default.btn-xs(data-toggle="modal",data-target="#switch-settings-modal")
+    //-   span.glyphicon.glyphicon-wrench
+    //- button.btn.btn-default.btn-xs()
+    //-   span.glyphicon.glyphicon-chevron-up
+  div( collapse='isCollapsed')
+    // panel body
+    div.panel-body
+        div( data-ng-repeat="aSwitch in switches | filter:{devType:'appliance'}: true")
+            div.row.panel-row     
+                div.col-xs-4.panel-element
+                    h4 {{ aSwitch.devName }}     
+                div.col-xs-6.panel-element
+                    div.btn-group.btn-group-stretch
+                        // off button
+                        label(data-ng-change="switchClicked(aSwitch)", data-ng-model="aSwitch.devState", data-ng-class="{1:'btn-default',0:'btn-info'}[aSwitch.devState]", btn-radio="0" ).btn.btn-lg.btn-50 {{ aSwitch.devState == 0 ? 'Off' : '&nbsp;' }}
+                        // on button
+                        label(data-ng-change="switchClicked(aSwitch)", data-ng-model="aSwitch.devState", data-ng-class="{1:'btn-success',0:'btn-default'}[aSwitch.devState]", btn-radio="1" ).btn.btn-lg.btn-50 {{ aSwitch.devState == 1 ? 'On' : '&nbsp;' }}
+                div.col-xs-2.panel-element    
+                    div.led( data-ng-class="{1:'led-green',0:'led-grey'}[aSwitch.devState]")
+    div.panel-footer
+        small Gang uit om 18:05
+
       //-   div.col-xs-4.panel-element
       //-     h4 Gang  
       //-   div.col-xs-6.panel-element

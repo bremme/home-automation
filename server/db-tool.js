@@ -10,12 +10,13 @@ console.log('open db: ' + JSON.stringify(db));
 
 // local variables
 
+// name, floor
 var locations = [
-  'hallway',
-  'kitchen',
-  'livingroom',
-  'studyroom',
-  'loft'];
+  ['hallway','first'],
+  ['kitchen','first'],
+  ['livingroom','first'],
+  ['studyroom','first'],
+  ['loft','loft']];
 var systemCodes = [];
 var receiverCodes = [];
 for (var i=0 ; i <  32 ; i++) { systemCodes[i] = i }
@@ -26,10 +27,12 @@ var deviceTypes =[
   'appliance'
   ];
 
+
+
 // id, name, name_short, device_type_id, location_id, state, switch_id
-devices = [['light','light', 1, 1, 0 ,156],['light','light', 1, 2,0,157],['light','light', 1, 3,0,158],['light','light', 1, 4,0,159],
-  ['moodlight','moodlight', 1, 3, 0, 160],['Harman Kardon amplifier','hkamp', 2, 3,0,151],['Onkyo amplifier', 'onkamp', 2, 3,0,152],
-  ['light','light', 1, 5,0,153],['moodlight','moodlight',1, 5,0,154],['monitor','monitor', 2, 3,0,155]];
+devices = [['Hallway','halllight', 1, 1, 0 ,156],['Kitchen','kitchenlight', 1, 2,0,157],['Livingroom','livinglight', 1, 3,0,158],['Studyroom','studylight', 1, 4,0,159],
+  ['Livingroom moodlight','moodlight', 1, 3, 0, 160],['H&K amplifier','hkamp', 2, 3,0,151],['Onkyo amplifier', 'onkamp', 2, 3,0,152],
+  ['Loft','loftlight', 1, 5,0,153],['Loft lightstrip','lightstrip',1, 5,0,154],['Monitor','monitor', 2, 3,0,155]];
 
 console.log('systemCodes: ' + systemCodes);
 
@@ -47,7 +50,7 @@ DbTool.prototype.init = function(db) {
 
     // CREATE TABLES
     // Create Locations table
-    db.run("CREATE TABLE locations (id INTEGER PRIMARY KEY, name TEXT)",[],function(err){
+    db.run("CREATE TABLE locations (id INTEGER PRIMARY KEY, name TEXT, floor TEXT)",[],function(err){
       if (err) {
         console.log(err);
       }
@@ -104,7 +107,7 @@ DbTool.prototype.init = function(db) {
     db.run("BEGIN TRANSACTION");
 
     for (var i=0; i < locations.length; i++) {
-      db.run("INSERT INTO locations VALUES (NULL,?)",[ locations[i]],function(err){
+      db.run("INSERT INTO locations VALUES (NULL,?,?)",[ locations[i][0], locations[i][1]],function(err){
         if (err) {
           console.log(err)
         }
@@ -154,15 +157,17 @@ DbTool.prototype.init = function(db) {
     // db.run("CREATE VIEW IF NOT EXISTS v_devices AS SELECT devices.id as dev_id, devices.name as dev_name, locations.name as loc_name,switches.properties_json FROM devices,locations,switches WHERE devices.location_id=locations.id AND devices.switch_id=switches.id")
 
     db.run("CREATE VIEW IF NOT EXISTS v_devices \
-      AS SELECT devices.id as dev_id, \
-      device_types.type as dev_type, \
-      locations.name as dev_loc, \
-      devices.name_short as dev_name_short, \
-      devices.state as dev_state \
+      AS SELECT devices.id as devId, \
+      device_types.type as devType, \
+      locations.name as devLoc, \
+      devices.name_short as devNameShort, \
+      devices.name as devName, \
+      devices.state as devState, \
+      locations.floor as devFloor \
       FROM devices,locations,switches,device_types \
       WHERE devices.location_id=locations.id AND devices.switch_id=switches.id \
       AND devices.device_type_id=device_types.id \
-      ORDER BY dev_type DESC, dev_loc\
+      ORDER BY devType DESC, devFloor, devLoc\
       ");
 
     db.close();

@@ -26,7 +26,7 @@ angular.module('app.controllers',[])
   // Light switches
 
   // Initialization of switches
-  socket.on('init:switch:lights',function(rows) {
+  socket.on('init:switch',function(rows) {
 
     if (! $scope.switched ) {
       $scope.switches = [];  
@@ -34,8 +34,9 @@ angular.module('app.controllers',[])
         
     for (var key in rows) {
       $scope.switches.push(rows[key]);
-    }     
-  })
+    }
+
+  });
 
 
   socket.on('change:switch', function(aSwitch) {

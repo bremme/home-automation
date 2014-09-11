@@ -21,7 +21,7 @@ SocketsHandler.prototype.listen = function(socket) {
   var data = {};
 
   // get switches state from database
-  db.all("SELECT * FROM v_devices WHERE devType='light'",function(err,rows) {
+  db.all("SELECT * FROM v_devices",function(err,rows) {
 
     // convert data to appropriate formate
     // data.<device_type>.<location_name>.<dev_name_short> = <state_string>
@@ -31,7 +31,7 @@ SocketsHandler.prototype.listen = function(socket) {
       console.log(err)
     } else {
 
-      socket.emit('init:switch:lights', rows);
+      socket.emit('init:switch', rows);
       // function(rows) {
       //   for (i=0 ; i < rows.length; i++) {
       //     row = rows[i];
