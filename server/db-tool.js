@@ -115,9 +115,9 @@ DbTool.prototype.init = function(db) {
     }
 
 
-    // for (var i=0; i < devices.length; i++ ){
-    //   db.run("INSERT INTO devices VALUES (NULL, ?, ?, ?, ?)",devices[i][0],devices[i][1],devices[i][2],devices[i][3]);  
-    // }
+    for (var i=0; i < devices.length; i++ ){
+      db.run("INSERT INTO devices VALUES (NULL, ?, ?, ?, ?)",devices[i][0],devices[i][1],devices[i][2],devices[i][3]);  
+    }
     
     db.run("COMMIT");
 
