@@ -13,8 +13,10 @@ div.panel.panel-default
           h4 Gang        
         div.col-xs-6.panel-element
           div.btn-group.btn-group-stretch
-            label(data-ng-model="lights['hallway']",btn-radio="'off'").btn.btn-lg.btn-50.btn-default.active {{ lights['hallway'] == 'off' ? 'Off' : '&nbsp;' }}
-            label(data-ng-model="lights['hallway']",btn-radio="'on'").btn.btn-lg.btn-50.btn-info {{ lights['hallway'] == 'on' ? 'On' : '&nbsp;' }}
+            // off button
+            label(data-ng-model="lights['hallway']", data-ng-class="{on:'btn-default',off:'btn-info'}[lights['hallway']]", btn-radio="'off'").btn.btn-lg.btn-50 {{ lights['hallway'] == 'off' ? 'Off' : '&nbsp;' }}
+            // on button
+            label(data-ng-model="lights['hallway']", data-ng-class="{on:'btn-success',off:'btn-default'}[lights['hallway']]", btn-radio="'on'").btn.btn-lg.btn-50 {{ lights['hallway'] == 'on' ? 'On' : '&nbsp;' }}
         div.col-xs-2.panel-element    
           div.led( data-ng-class="{on:'led-green',off:'led-grey'}[lights['hallway']]")
       div.row.panel-row
@@ -22,8 +24,10 @@ div.panel.panel-default
           h4 Keuken       
         div.col-xs-6.panel-element
           div.btn-group.btn-group-stretch
-            label(data-ng-model="lights['kitchen']",btn-radio="'off'").btn.btn-lg.btn-50.btn-default.active {{ lights['kitchen'] == 'off' ? 'Off' : '&nbsp;' }}
-            label(data-ng-model="lights['kitchen']",btn-radio="'on'").btn.btn-lg.btn-50.btn-info {{ lights['kitchen'] == 'on' ? 'On' : '&nbsp;' }}
+            // off button
+            label(data-ng-model="lights['kitchen']", data-ng-class="{on:'btn-default',off:'btn-info'}[lights['kitchen']]", btn-radio="'off'").btn.btn-lg.btn-50 {{ lights['kitchen'] == 'off' ? 'Off' : '&nbsp;' }}
+            // on button
+            label(data-ng-model="lights['kitchen']", data-ng-class="{on:'btn-success',off:'btn-default'}[lights['kitchen']]", btn-radio="'on'").btn.btn-lg.btn-50 {{ lights['kitchen'] == 'on' ? 'On' : '&nbsp;' }}  
         div.col-xs-2.panel-element    
           div.led( data-ng-class="{on:'led-green',off:'led-grey'}[lights['kitchen']]")
     //-   div.col-xs-9

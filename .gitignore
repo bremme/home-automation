@@ -1,2 +1,4 @@
+db/
 node_modules/
 client/lib
+config.json

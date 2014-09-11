@@ -16,8 +16,14 @@ angular.module('app.controllers',[])
   $scope.items = ["A", "List", "Of", "Items"];
 
 }])
+
+// Switches controller
 .controller('switchesCtrl',
 [ '$scope', 'socket', function ( $scope, socket ) {
+
+  // Light switches
+
+
 
   $scope.isCollapsed = false;
 
@@ -31,23 +37,25 @@ angular.module('app.controllers',[])
     upstairsMood:'off'
   }
 
-  $scope.lightHallway = 'off';
-
-  $scope.$watchCollection('lights', function(newValue, oldValue) { 
-
-    var changedSwitch = {};
+  // Watch for light switch changes
+  $scope.$watchCollection('lights', function(newValue, oldValue) {     
 
     // loop over items in object
     for (var key in newValue ) {
 
       if (newValue[key] != oldValue[key]) {
-        changedSwitch[key] = newValue[key];
-        
         console.log(key + ' ' + newValue[key])
+        socket.emit('change:switch', {somedata: 'somedata'}, function(res) {
+          
+
+          console.log(res.msg,res.info);
+        })
         break;
       }
     } 
   });
+  // Appliance switches
+
 
 }])
 .controller('weatherCtrl',
