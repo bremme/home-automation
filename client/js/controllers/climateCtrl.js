@@ -8,11 +8,12 @@ angular.module('app.controllers')
   $scope.isCollapsed = false;
 
   // temperature setpoint increament/decreament
-  $scope.incTemp = 0.5;
+  $scope.INCTEMP = 0.5;
 
   // SOCKET ON (UPDATES) ///////////////////////////////////////////////////////
 
   socket.on('init:climate', function(rows) {
+
 
     $scope.climate = rows[0];
     console.log('init:climate');
@@ -30,31 +31,67 @@ angular.module('app.controllers')
 
 // SOCKET EMIT (UPDATE) //////////////////////////////////////////////////////
   
-  $scope.timeOutStarted = false;
+  
+  // initialise timeout
+  var mytimeout = null;
+
+  var COUNTDOWNSECONDS = 1;
 
   $scope.addTemp = function(add) {
-
-    
+  
     $scope.climate.setTemp += add;
-
-    if (! $scope.timeOutStarted) {
-
-      $scope.timeOutStarted = true;
-      console.log('change:climate: waiting for more user input...')
-      // 
-      $timeout( function() {
+    // reset time out counter (wait another second for user input )
+    // $scope.timeOutCounter = 1;
+    // console.log( 'change:climate: reset timeout counter (user clicked within timeout)')
+    // 
+    if ( ! mytimeout ) { 
+      console.log('change:climate: waiting ' + COUNTDOWNSECONDS + ' sec for more user input...');
+      // set initial timeout counter
+      $scope.timeOutCounter = COUNTDOWNSECONDS;
+      startTimeOut( function() {
+        // do stuff //
         var data = {};
         data.setTemp = $scope.climate.setTemp;
-        // TODO it would be better to wait one second
-        socket.emit('change:climate', data );
-        console.log('change:climate: new setpoint is ' + $scope.climate.setTemp + ' by this client');
-        $scope.timeOutStarted = false;
-      }, 2000);
+        socket.emit('change:climate', data, function(err) {
+          if (err) {
+            console.log('change:climate: ERROR ' + JSON.stringify(err));
 
-    }
+          // TODO handle error (revert) / ask for server update
 
 
-
+          } else {
+            console.log('change:climate: new setpoint is ' + $scope.climate.setTemp + ' by this client');  
+          }
+        });
+        // end do stuff //
+      })    
+    } else {
+      // reset timeout counter
+      $scope.timeOutCounter = COUNTDOWNSECONDS;
+      console.log('change:climate: resetting user timeout to ' + COUNTDOWNSECONDS + ' sec');  
+    }   
   }
+
+  // Private helper functions 
+
+  var startTimeOut = function(fn) {
+
+    if ( $scope.timeOutCounter === 0 ) {
+      console.log('change:climate: timeout finished!');
+      $timeout.cancel(mytimeout);
+      mytimeout = null;
+      fn();
+      return;
+    }
+     
+    // coundown
+    $scope.timeOutCounter -= 1  
+           
+    mytimeout = $timeout(function () {
+      startTimeOut(fn) }, 1000);
+  }
+
+
+
 
 }])

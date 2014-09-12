@@ -52,7 +52,10 @@ body
               a(ui-sref='home') Link
             li
               a(ui-sref='home') Link
-
+    // ALERTS
+    div.row
+      div( data-ng-controller="AlertCtrl")
+        alert( data-ng-repeat="alert in alerts", type="{{alert.type}}", close="closeAlert($index)") {{ alert.msg }}
     // MAIN CONTENT
     div.row
       div( data-ui-view )

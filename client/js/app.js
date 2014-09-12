@@ -29,7 +29,12 @@ angular.module( 'app', [
             controller: 'climateCtrl'
           }
         }
-      });
+      })
+    .state( 'test', {
+      url: '/test',
+      templateUrl: 'test',
+      controller: 'testCtrl'
+    })
   }]);
 
 

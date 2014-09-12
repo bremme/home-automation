@@ -55,6 +55,7 @@ if (app.get('env') === 'production') {
 
 // index route
 app.get('/', routes.index);
+app.get('/:page', routes.page );
 // partials route
 app.get('/partials/:name', routes.partials);
 

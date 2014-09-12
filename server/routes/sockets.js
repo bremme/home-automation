@@ -3,7 +3,7 @@
 var db   = require('../db-con.js');
 
 // Constructor method
-function SocketsHandler(db,io) {
+function SocketsHandler() {
 
 }
 
@@ -14,7 +14,7 @@ SocketsHandler.prototype.listen = function(socket) {
 
   // INITIALISATION ////////////////////////////////////////////////////////////
 
-  console.log('a client connected: ' + socket.id);
+  console.log('a client connected with id: ' + socket.id);
 
   // Send (initial) system state
 
@@ -32,7 +32,7 @@ SocketsHandler.prototype.listen = function(socket) {
     } else {
 
       socket.emit('init:switch', rows);
-
+      console.log('init:switch: sending current state of switches to ' + socket.id); 
     }      
   });
 
@@ -42,6 +42,7 @@ SocketsHandler.prototype.listen = function(socket) {
       console.log(err);
     } else {
       socket.emit('init:climate', rows);
+      console.log('init:switch: sending current state of climate to ' + socket.id); 
     }
   })
  
@@ -52,7 +53,7 @@ SocketsHandler.prototype.listen = function(socket) {
   socket.on('change:switch', function(aSwitch, callback) {
 
 
-    console.log('change:switch: ' + JSON.stringify(aSwitch) );
+    console.log('change:switch: ' + JSON.stringify(aSwitch) + ' by ' + socket.id);
 
     // set new state of swtich (hardware)
 
@@ -60,6 +61,7 @@ SocketsHandler.prototype.listen = function(socket) {
     db.run("UPDATE devices SET state=? WHERE id=?", [aSwitch.devState, aSwitch.devId], function(err) {
 
       if(err) {
+        console.log('change:switch: an error occured while writing to the db');
         // log error on server
         console.log(err);
         // send error to client
@@ -67,7 +69,7 @@ SocketsHandler.prototype.listen = function(socket) {
       } else {
 
         socket.broadcast.emit('change:switch', aSwitch )
-
+        console.log('change:switch: update to db succesfull, broadcasting to other clients');
       }
     });
   })
@@ -80,22 +82,53 @@ SocketsHandler.prototype.listen = function(socket) {
     // find out which parameter is set
     // curTemp, setTemp, heaterOn, climateProgramId
 
-    // db.run("BEGIN TRANSACTION")
 
-    for (var key in data) {
+    var keys = Object.keys(data)
+    var nrOfKeys = keys.length;
+
+    db.run("BEGIN TRANSACTION");
+
+    keys.forEach( function(key) {
 
       db.run("UPDATE ClimateState SET " + key + "=?",[data[key]], function(err) {
 
         if (err) {
-          console.log(err);          
-          return err;
+          callback(err);
+          db.run("ROLLBACK");
+          return
         }
-      });
-    }
+        if (nrOfKeys -= 1 === 0 )
+          db.run("COMMIT")
+          callback();
+      })
+
+    });
+
+
+    // db.run("BEGIN TRANSACTION")
+
+
+    // for (var key in data) {
+
+    //   db.run("UPDATE ClimateState SET " + key + "=?",[data[key]], function(err) {
+
+    //     if (err) {
+    //       console.log('change:climate: an error occured while writing to the db');
+    //       console.log(err);          
+    //       return err;
+    //     }
+    //   });
+    // }
 
     // db.run("COMMIT");
-
-    socket.broadcast.emit('change:climate', data)
+    
+    // if (err) {
+    //   callback(err)
+    // } else {
+    //   socket.broadcast.emit('change:climate', data)
+    //   callback();
+    //   console.log('change:climate: update to db succesfull, broadcasting to other clients');
+    // }    
 
   });
 
