@@ -1,5 +1,7 @@
 'use strict';
 
+
+
 angular.module( 'app', [
   'app.controllers',
   'app.services',
@@ -29,3 +31,6 @@ angular.module( 'app', [
         }
       });
   }]);
+
+
+angular.module('app.controllers',[]); 
