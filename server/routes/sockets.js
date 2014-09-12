@@ -37,7 +37,7 @@ SocketsHandler.prototype.listen = function(socket) {
   });
 
   // get climate state from database 
-  db.all("SELECT * FROM v_climate_state", function(err,rows) {
+  db.all("SELECT * FROM v_ClimateState", function(err,rows) {
     if (err) {
       console.log(err);
     } else {
@@ -75,16 +75,16 @@ SocketsHandler.prototype.listen = function(socket) {
   // PUT - Update climate state
   socket.on('change:climate', function(data, callback ) {
 
+    console.log('change:climate: ' + JSON.stringify(data) + ' by ' + socket.id);
+
     // find out which parameter is set
     // curTemp, setTemp, heaterOn, climateProgramId
 
-    db.run("BEGIN TRANSACTION")
+    // db.run("BEGIN TRANSACTION")
 
-    for (key in data) {
+    for (var key in data) {
 
-      value = data[key];
-
-      db.run("UPDATE climate_state SET " + key + "=?",[value], function(err) {
+      db.run("UPDATE ClimateState SET " + key + "=?",[data[key]], function(err) {
 
         if (err) {
           console.log(err);          
@@ -92,7 +92,8 @@ SocketsHandler.prototype.listen = function(socket) {
         }
       });
     }
-    db.run("COMMIT");
+
+    // db.run("COMMIT");
 
     socket.broadcast.emit('change:climate', data)
 

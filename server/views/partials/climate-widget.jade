@@ -9,7 +9,7 @@ div.panel.panel-default
           //- div.row
             // current temperature
           div.col-xs-9
-            p(style="font-size:4em") {{ climate.curTemp  | number : 1 }}°
+            p(style="font-size:4em") {{ climate.currentTemp  | number : 1 }}°
           div.col-xs-3
             span( data-ng-style="{ color: climate.heaterOn  === 1 ? 'red':'black' }" ).glyphicon.glyphicon-fire
         div.col-xs-3

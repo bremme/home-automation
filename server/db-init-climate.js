@@ -63,7 +63,7 @@ db.serialize( function() {
     }
   });
 
-  db.run("DROP VIEW IF EXISTS v_Climate_State");
+  db.run("DROP VIEW IF EXISTS v_ClimateState");
   db.run("CREATE VIEW IF NOT EXISTS v_ClimateState\
    AS SELECT ClimateState.currentTemp, ClimateState.setTemp, \
    ClimateState.heaterOn, ClimatePrograms.name AS climateProgram \
