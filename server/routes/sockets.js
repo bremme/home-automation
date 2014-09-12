@@ -67,33 +67,36 @@ SocketsHandler.prototype.listen = function(socket) {
       } else {
 
         socket.broadcast.emit('change:switch', aSwitch )
-      //     // confirm succesfull change of switch state
-      //     db.all("SELECT * FROM v_devices WHERE devId=?",[data.devId], function(err,rows) {
-
-      //       if ( !err ) {
-      //         var sw = {};
-      //         sw.id = rows[0].dev_id;
-      //         sw.state = rows[0].dev_state;
-      //         sw.location = rows[0].dev_loc;
-      //         sw.nameShort = rows[0].dev_name_short;
-      //         console.log(sw)
-      //         // send changed switch state to other clients
-      //         socket.broadcast.emit('change:switch', sw)
-      //       }
-
-      //     })
-          
-
-      //     // var res = {msg:'succes',info:'Succesfully change state of switch'};
-
-      //     // callback(err);
 
       }
     });
-
-
-
   })
+
+  // PUT - Update climate state
+  socket.on('change:climate', function(data, callback ) {
+
+    // find out which parameter is set
+    // curTemp, setTemp, heaterOn, climateProgramId
+
+    db.run("BEGIN TRANSACTION")
+
+    for (key in data) {
+
+      value = data[key];
+
+      db.run("UPDATE climate_state SET " + key + "=?",[value], function(err) {
+
+        if (err) {
+          console.log(err);          
+          return err;
+        }
+      });
+    }
+    db.run("COMMIT");
+
+    socket.broadcast.emit('change:climate', data)
+
+  });
 
 
   socket.on('disconnect', function(socket) {

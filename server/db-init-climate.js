@@ -19,12 +19,12 @@ db.serialize( function() {
     }
   });
 
-  db.run("DROP TABLE IF EXISTS climate_programs", function(err) {
+  db.run("DROP TABLE IF EXISTS ClimatePrograms", function(err) {
     if (err) {
       console.log(err)
     }
   });
-  db.run("CREATE TABLE IF NOT EXISTS climate_programs (\
+  db.run("CREATE TABLE IF NOT EXISTS ClimatePrograms (\
     id INTEGER PRIMARY KEY,\
     name TEXT)\
     ", function(err) {
@@ -33,18 +33,18 @@ db.serialize( function() {
     }
   });
 
-  db.run("DROP TABLE IF EXISTS climate_state", function(err) {
+  db.run("DROP TABLE IF EXISTS ClimateState", function(err) {
     if (err) {
       console.log(err)
     }
   });
-  db.run("CREATE TABLE climate_state (\
+  db.run("CREATE TABLE ClimateState (\
     id INTEGER PRIMARY KEY,\
-    current_temp DECIMAL(5,2),\
-    set_temp DECIMAL(5,2),\
-    heater_on INTEGER,\
-    climate_program_id INTEGER,\
-    FOREIGN KEY(climate_program_id) REFERENCES climate_programs(id))\
+    currentTemp DECIMAL(5,2),\
+    setTemp DECIMAL(5,2),\
+    heaterOn INTEGER,\
+    climateProgramId INTEGER,\
+    FOREIGN KEY(climateProgramId) REFERENCES ClimatePrograms(id))\
     ", function(err) {
     if (err) {
       console.log(err)
@@ -52,19 +52,23 @@ db.serialize( function() {
   });
 
   
-  db.run("INSERT INTO climate_state VALUES(NULL,?,?,?,?)",[curTemp,setTemp,heaterOn,climateProgramId], function(err) {
+  db.run("INSERT INTO ClimateState VALUES(NULL,?,?,?,?)",[curTemp,setTemp,heaterOn,climateProgramId], function(err) {
     if (err) {
       console.log(error);
     }
   });
-  db.run("INSERT INTO climate_programs VALUES(NULL,?)",[climateProgramName], function(err) {
+  db.run("INSERT INTO ClimatePrograms VALUES(NULL,?)",[climateProgramName], function(err) {
     if (err) {
       console.log(error);
     }
   });
 
-  db.run("DROP VIEW IF EXISTS v_climate_state");
-  db.run("CREATE VIEW IF NOT EXISTS v_climate_state AS SELECT climate_state.current_temp as curTemp, climate_state.set_temp as setTemp, climate_state.heater_on as heaterOn, climate_programs.name as climateProgram FROM climate_state, climate_programs WHERE climate_state.climate_program_id=climate_programs.id");
+  db.run("DROP VIEW IF EXISTS v_Climate_State");
+  db.run("CREATE VIEW IF NOT EXISTS v_ClimateState\
+   AS SELECT ClimateState.currentTemp, ClimateState.setTemp, \
+   ClimateState.heaterOn, ClimatePrograms.name AS climateProgram \
+   FROM ClimateState, ClimatePrograms \
+   WHERE ClimateState.climateProgramId=climatePrograms.id");
 
 
   db.run('COMMIT')

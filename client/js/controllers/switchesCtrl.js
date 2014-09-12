@@ -7,7 +7,7 @@ angular.module('app.controllers')
 
   $scope.isCollapsed = false;
 
-  // Light switches
+  // SOCKET ON (UPDATES) ///////////////////////////////////////////////////////
 
   // Initialization of switches
   socket.on('init:switch',function(rows) {
@@ -24,7 +24,7 @@ angular.module('app.controllers')
 
   });
 
-
+  // Updates from server
   socket.on('change:switch', function(aSwitch) {
     // get the index of the switch that changed
     for (var i=0 ; i < $scope.switches.length ; i++) {
@@ -38,7 +38,9 @@ angular.module('app.controllers')
     console.log('change:switch : ' + $scope.switches[i].devNameShort + ' ' + $scope.switches[i].devLoc + ' (id:' + aSwitch.devId + ') to "' + ((aSwitch.devState === 1) ? 'on ':'off') + '" by other client');
   })
 
-  // handle switch clicked events
+  // SOCKET EMIT (UPDATE) //////////////////////////////////////////////////////
+
+  // Update to server
   $scope.switchClicked = function(aSwitch) {
     var data = {};
     data.devId = aSwitch.devId;

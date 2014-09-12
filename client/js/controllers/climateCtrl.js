@@ -17,9 +17,18 @@ angular.module('app.controllers')
 
   })
 
+  socket.on('change:climate', function(data) {
+
+    console.log(data);
+
+  });
+
   $scope.addTemp = function(add) {
 
+    var data = {};
     $scope.climate.setTemp += add;
+    data.setTemp = $scope.climate.setTemp;
+    socket.emit('change:climate', data );
     console.log('change:climate: new setpoint is ' + $scope.climate.setTemp + ' by this client');
 
   }
