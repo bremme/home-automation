@@ -10,14 +10,32 @@ angular.module('app.controllers',[])
   $scope.sitename = "Example.com"
 
 }])
+// Climate controller //////////////////////////////////////////////////////////
 .controller('climateCtrl',
-[ '$scope', function ( $scope ) {
+[ '$scope','socket', function ( $scope, socket ) {
 
-  $scope.items = ["A", "List", "Of", "Items"];
+  $scope.isCollapsed = false;
+
+  // temperature setpoint increament/decreament
+  $scope.incTemp = 0.5;
+
+  socket.on('init:climate', function(rows) {
+
+    $scope.climate = rows[0];
+    console.log('init:climate');
+
+  })
+
+  $scope.addTemp = function(add) {
+
+    $scope.climate.setTemp += add;
+    console.log('change:climate: new setpoint is ' + $scope.climate.setTemp + ' by this client');
+
+  }
 
 }])
 
-// Switches controller
+// Switches controller /////////////////////////////////////////////////////////
 .controller('switchesCtrl',
 [ '$scope', '$filter', 'socket', function ( $scope, $filter, socket ) {
 
@@ -35,6 +53,8 @@ angular.module('app.controllers',[])
     for (var key in rows) {
       $scope.switches.push(rows[key]);
     }
+
+    console.log('init:switch');
 
   });
 

@@ -32,18 +32,18 @@ SocketsHandler.prototype.listen = function(socket) {
     } else {
 
       socket.emit('init:switch', rows);
-      // function(rows) {
-      //   for (i=0 ; i < rows.length; i++) {
-      //     row = rows[i];
-      //     data[row.dev_type] = {};
-      //     data[row.dev_type][row.dev_loc] = {}
-      //     data[row.dev_type][row.dev_loc][row.dev_short_name] ={}
-      //     data[row.dev_type][row.dev_loc][row.dev_short_name]['id'] = row.dev_id;
-      //     data[row.dev_type][row.dev_loc][row.dev_short_name]['state'] = row.dev_state;        
-      //   } 
 
     }      
   });
+
+  // get climate state from database 
+  db.all("SELECT * FROM v_climate_state", function(err,rows) {
+    if (err) {
+      console.log(err);
+    } else {
+      socket.emit('init:climate', rows);
+    }
+  })
  
   
   // EVENTS ////////////////////////////////////////////////////////////////////

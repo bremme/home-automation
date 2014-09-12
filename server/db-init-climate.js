@@ -6,9 +6,9 @@ var db      = new sqlite3.Database('db/home.db');
 var curTemp = 20;
 var setTemp = 23;
 var heaterOn = 1;
-var climateProgramId = 0;
+var climateProgramId = 1;
 
-var climateProgramName = 'manual';
+var climateProgramName = 'Manual';
 
 
 db.serialize( function() {
@@ -51,7 +51,7 @@ db.serialize( function() {
     }
   });
 
-
+  
   db.run("INSERT INTO climate_state VALUES(NULL,?,?,?,?)",[curTemp,setTemp,heaterOn,climateProgramId], function(err) {
     if (err) {
       console.log(error);
@@ -63,6 +63,8 @@ db.serialize( function() {
     }
   });
 
+  db.run("DROP VIEW IF EXISTS v_climate_state");
+  db.run("CREATE VIEW IF NOT EXISTS v_climate_state AS SELECT climate_state.current_temp as curTemp, climate_state.set_temp as setTemp, climate_state.heater_on as heaterOn, climate_programs.name as climateProgram FROM climate_state, climate_programs WHERE climate_state.climate_program_id=climate_programs.id");
 
 
   db.run('COMMIT')

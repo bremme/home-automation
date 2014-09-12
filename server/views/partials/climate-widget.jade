@@ -1,40 +1,39 @@
 div.panel.panel-default
-  div.panel-heading(style="padding:5px;text-align:right;")
-    button.btn.btn-default.btn-xs(data-toggle="modal",data-target="#settings-modal")
-      span.glyphicon.glyphicon-wrench
-    button.btn.btn-default.btn-xs#climate-panel-collapse-btn
-      span.glyphicon.glyphicon-chevron-up
-  div.collapse.in#climate-panel
+  div.panel-heading(data-ng-click="isCollapsed = !isCollapsed")
+    div.panel-title-lg Climate
+  div( collapse='isCollapsed')
     // panel body
     div.panel-body
       div.row
         div.col-xs-6
-          div.row
+          //- div.row
             // current temperature
-            div.col-xs-9
-              p(style="font-size:4em") 19.5°
-            div.col-xs-3
-              span(style="color:red;").glyphicon.glyphicon-fire
+          div.col-xs-9
+            p(style="font-size:4em") {{ climate.curTemp  | number : 1 }}°
+          div.col-xs-3
+            span( data-ng-style="{ color: climate.heaterOn  === 1 ? 'red':'black' }" ).glyphicon.glyphicon-fire
         div.col-xs-3
           div.row
-            p(style="font-size:2em") 21.0°
+            p(style="font-size:2em") {{ climate.setTemp  | number : 1}}°
           div.row
-            p Thuis
+            p {{ climate.climateProgram }}
         div.col-xs-3
           div.btn-group-vertical
-            button.btn.btn-default.btn-md
+            button( data-ng-click="addTemp(incTemp)").btn.btn-default.btn-lg
               span.glyphicon.glyphicon-plus
-            button.btn.btn-default.btn-md
+            button( data-ng-click="addTemp(-incTemp)").btn.btn-default.btn-lg
               span.glyphicon.glyphicon-minus
-      div.row(style="margin:0;")
-        div.btn-group.btn-group-justified
-          div.btn-group
-            button.btn.btn-default.btn-md 1                
-          div.btn-group
-            button.btn.btn-default.btn-md 2
-          div.btn-group
-            button.btn.btn-default.btn-md 3
-          div.btn-group
-            button.btn.btn-default.btn-md 4
+      div.row
+        div.col-xs-12
+          div.btn-group.btn-group-justified.top-buffer
+            div.btn-group
+              button.btn.btn-warning.btn-lg 
+                i.fa.fa-sun-o               
+            div.btn-group
+              button.btn.btn-info.btn-lg
+                i.fa.fa-moon-o
+            div.btn-group
+              button.btn.btn-default.btn-lg
+                i.fa.fa-wrench
 
     div.panel-footer Volgend programma: "Weg" om 20:05

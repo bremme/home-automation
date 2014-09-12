@@ -33,6 +33,10 @@ a {
 .panel-element {
   top: 50%;
   transform: translateY(-50%);
+}
+
+.top-buffer {
+  margin-top: 20px;
 
 }
 

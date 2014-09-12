@@ -170,6 +170,8 @@ DbTool.prototype.init = function(db) {
       ORDER BY devType DESC, devFloor, devLoc\
       ");
 
+
+
     db.close();
   })
 

@@ -23,7 +23,8 @@ angular.module( 'app', [
             controller: 'switchesCtrl'
           },
           'climate-widget@home': {
-            templateUrl: 'partials/climate-widget'
+            templateUrl: 'partials/climate-widget',
+            controller: 'climateCtrl'
           }
         }
       });
